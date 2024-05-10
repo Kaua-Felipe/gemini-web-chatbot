@@ -1,8 +1,7 @@
-# gemini-web-chatbot
 <a id="readme-top"></a>
 
 <h1 align="center"> 
- Gemini Web Chatbot 🚀
+ Gemini Web Chatbot - Wall-e 🚀
 </h1>
 
 <div align="center">
@@ -25,7 +24,7 @@
 > <h2 id="sobre">📑Sobre</h2>
 
 <strong>A proposta do sistema é a seguinte:</strong> A proposta é querer ajudar e facilitar a vida de quem está aprendendo a programar, foi criado um chatbot em uma interface web usando a API do Google AI Studio em HTML, CSS e Javascript em que a pessoa poderá pesquisar e perguntar assuntos sobre progrmação ao bot chamdo Wall-e, e fora isso, a pessoa poderá enviar uma imagem de um código que esteja enfrentando dificuldades ou que esteja querendo uma explicação passo a passo do código da imagem.
-<strong>Link do Projeto em tempo real: </strong><a href="https://interface-api-github.netlify.app/">https://interface-api-github.netlify.app/</a>
+<strong>Link da Interface em tempo real: </strong><a href="[https://interface-api-github.netlify.app/](https://gemini-web-chatbot.netlify.app/)">https://gemini-web-chatbot.netlify.app/</a>
 
 > <h2 id="pre-requisitos">✔️ Pré-requisitos</h2>
 
