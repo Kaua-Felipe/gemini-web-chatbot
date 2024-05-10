@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HelpMeCode</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="index.css">
+        <link rel="shortcut icon" href="https://www.asobostudio.com/files/styles/imxs/public/games/top/walle-top_0.jpg?itok=LEus6m9u" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>HelpMeCode</h1>
+        <p>Wall-e o ajudará em sua jornada de programador. É bem simples, digite o que precise saber e caso queira que ele explique um código que esteja em uma imagem, é só selecionar clicando no ícone da imagem e pedir que ele faça o passo a passo do código feito. Bora Codar!</p>
+    </header>
+    
+    <div class="container-fluid h-100">
+        <div class="row justify-content-center h-100">		
+            <div class="col-md-8 col-xl-6 chat">
+                <div class="card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="https://www.asobostudio.com/files/styles/imxs/public/games/top/walle-top_0.jpg?itok=LEus6m9u" class="rounded-circle user_img" style="background-color: white; object-fit: cover;">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <span>Wall-e</span>
+                                <p>O que deseja?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="messageFormeight" class="card-body msg_card_body">
+                        <pre id="textRes"></pre>
+                    </div>
+                    <div class="card-footer">
+                        <div id="messageArea" class="input-group">
+                            <input type="text" id="text" name="msg" placeholder="Escreva sua mensagem..." autocomplete="off" class="form-control type_msg" />
+                            <label for="selecao-arquivo">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                    <path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/>
+                                </svg>
+                            </label>
+                            <input id="selecao-arquivo" type="file" style="display: none;" accept="image/png, image/jpeg, image/jpg">
+                            <div class="input-group-append">
+                                <button id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="img-selecionada">
+                        <div>
+                            <span>Imagem selecionada:</span>
+                            <img src="" alt="" id="showImage">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+    </script>
+
+    <!-- Script principal da aplicação -->
+    <script type="module">
+        // Importando Biblioteca/API
+        import { GoogleGenerativeAI } from "@google/generative-ai"
+
+        const API_KEY = "COLOQUE SUA CHAVE AQUI" // Chave API, coloque a sua criando uma no Google AI Studio
+        const genAI = new GoogleGenerativeAI(API_KEY)
+
+        // Fazer com que a imagem quando selecionada apareça na tela
+        const inputImage = document.querySelector("input#selecao-arquivo")
+        const showImage = document.querySelector("img#showImage")
+        inputImage.addEventListener('change', (evt) => {
+            if (!(evt.target && evt.target.files && evt.target.files.length > 0)) {
+                return
+            } else {
+                document.querySelector("div.img-selecionada").style.display = "flex"
+            }
+
+            var r = new FileReader()
+            r.onload = () => {
+                showImage.src = r.result
+            }
+            r.readAsDataURL(evt.target.files[0])
+        })
+
+        // Processo para receber uma imagem a ser mandada junto ao prompt
+        async function fileToGenerativePart(file) {
+            const base64EncodedDataPromise = new Promise((resolve) => {
+                const reader = new FileReader()
+                reader.onloadend = () => resolve(reader.result.split(',')[1])
+                reader.readAsDataURL(file)
+            })
+            return {
+                inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
+            }
+        }
+
+        // Toda funcionalidade para enviar as informações, e devolve-las como resposta
+        const btnResposta = document.querySelector("button#send")
+        btnResposta.addEventListener("click", async () => {
+            const campoText = document.querySelector("pre#textRes")
+            const textoDigitado = document.querySelector("input#text").value
+            const fileInputEl = document.querySelector("input[type=file]")
+
+            document.querySelector("input#text").value = ""
+            document.querySelector("div.img-selecionada").style.display = "none"
+            campoText.innerHTML = "Carregando Resposta..."
+
+            const imageParts = await Promise.all(
+                [...fileInputEl.files].map(fileToGenerativePart)
+            )
+
+            let model = ""
+            // Verificando qual modelo irá ser usado, caso selecione uma imagem ou não
+            if(fileInputEl.files.length == 0) {
+                model = genAI.getGenerativeModel({ model: "gemini-pro"})
+            } else {
+                model = genAI.getGenerativeModel({ model: "gemini-pro-vision"})
+            }
+            
+            const question = textoDigitado
+
+            const result = await model.generateContent([question, ...imageParts]) // Enviando conteúdo para a API 
+            const response = await result.response
+            const text = response.text()
+            const readyText = text.replace(/\*/g, " ") // Tirando '*' da resposta que vem da API
+            
+            campoText.innerHTML = `<span class="pessoa">Eu: </span>${question}:<br><br><span class="bot">Wall-e: </span><br>${readyText}` // Imprimindo na tela do chat bot
+        })
+    </script>
+</body>
+</html>
