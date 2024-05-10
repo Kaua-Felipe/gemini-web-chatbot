@@ -74,7 +74,12 @@
         // Importando Biblioteca/API
         import { GoogleGenerativeAI } from "@google/generative-ai"
 
-        const API_KEY = "COLOQUE SUA CHAVE AQUI" // Chave API, coloque a sua criando uma no Google AI Studio
+        const API_KEY = prompt("Informe sua chave API para conectar: ")
+        if(API_KEY == "") {
+            alert("Você precisa enviar uma API_KEY para dar certo!")
+        } else {
+            alert("Pronto, ambiente conectado para interação!")
+        }
         const genAI = new GoogleGenerativeAI(API_KEY)
 
         // Fazer com que a imagem quando selecionada apareça na tela
