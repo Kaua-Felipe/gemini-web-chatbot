@@ -28,7 +28,7 @@
 
 > <h2 id="pre-requisitos">✔️ Pré-requisitos</h2>
 
-Antes de começar, você vai precisar ter que gerar uma chave API(API_KEY) na página do Google AI Studio para ver o sistema funcionando: [Google AI Studio](https://aistudio.google.com/app/prompts/new_chat/?utm_source=website&utm_medium=referral&utm_campaign=Alura&utm_content=). Apenas terá que ter uma conta Google, e ir na opção "GET API KEY", e clicar em "Create API Key", guarde a chave que irá gerar para os próximos passos.
+Antes de começar, você vai precisar ter que gerar uma chave API(API_KEY) na página do Google AI Studio para ver o sistema funcionando: [Google AI Studio](https://aistudio.google.com/app/prompts/new_chat/?utm_source=website&utm_medium=referral&utm_campaign=Alura&utm_content=). Apenas terá que ter uma conta Google, e ir na opção "GET API KEY", e clicar em "Create API Key", guarde a chave que irá gerar e quando entrar na página "index.html" e insira no PopUp que irá abrir a sua API_KEY.
 
 ---
 
@@ -37,10 +37,6 @@ Antes de começar, você vai precisar ter que gerar uma chave API(API_KEY) na p�
 ```bash
 # Clone este repositório (Ou simplesmente baixe a pasta raíz do repositório)
 $ git clone https://github.com/Kaua-Felipe/github-api-interface.git
-
-Abra com algum editor de texto o arquivo "index.html"
-Na linha 77 do arquivo, terá o campo a ser inserido sua chave que foi gerada no Google API Studio
-Basta alterar o conteúdo dentro das aspas para a sua chave: const API_KEY = "COLOQUE SUA CHAVE AQUI"
 
 Agora está tudo pronto, é só abrir o arquivo index.html em algum navegador, que já vai estar funcionando!
 ```
